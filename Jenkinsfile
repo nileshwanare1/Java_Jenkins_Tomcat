@@ -26,7 +26,7 @@ pipeline {
                     tomcat9(
                         credentialsId: 'tomcat-cred',
                         path: '',
-                        url: 'http://13.201.16.99:8080/'
+                        url: 'http://13.206.81.70:8080/'
                     )
                 ],
                 contextPath: '',
