@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Stage 1: Clone Repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/nileshwanare1/Java_Jenkins_Tomcat.git'
+
+                echo 'Repository cloned successfully'
+            }
+        }
+
+        stage('stage 2: Check Workspace') {
+    steps {
+        bat 'cd'
+        bat 'dir'
+        bat 'dir /s pom.xml'
+    }
+}
+        stage('stage 3: Build Application') {
+            steps {
+                bat 'mvn clean install'
+            }
+        }
+        stage('Stage 4: Docker Login & Build Image') {
+    steps {
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'Local_Docker_cred',
+                usernameVariable: 'my_User',
+                passwordVariable: 'my_Pass'
+            )
+        ]) {
+
+            bat '''
+            echo %my_Pass% | docker login -u %my_User% --password-stdin
+            docker build -t myapp:v10 .
+            docker tag myapp:v10 nileshdocker4/myapp:v10
+            docker push nileshdocker4/myapp:v10
+            '''
+
+            echo 'Docker image created and pushed successfully'
+            
+        }
+    }
+}
+    }
+}
