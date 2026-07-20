@@ -17,6 +17,7 @@ pipeline {
         bat 'cd'
         bat 'dir'
         bat 'dir /s pom.xml'
+	echo "workspace checked successfully"
     }
 }
         stage('stage 3: Build Application') {
